@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  ALLOW_ANONYMOUS_LOGIN: "yes"
+kind: ConfigMap
+metadata:
+  name: zookeeper-config
+  namespace: kafka

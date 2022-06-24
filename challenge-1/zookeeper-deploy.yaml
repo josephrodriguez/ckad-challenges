@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zookeeper
+  name: zookeeper
+  namespace: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+      containers:
+      - image: bitnami/zookeeper
+        name: zookeeper
+        envFrom:
+        - configMapRef:
+            name: zookeeper-config
+        ports:
+        - containerPort: 2181
+        resources:
+          requests:
+            cpu: "1"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "256Mi"
+        volumeMounts:
+        - name: zookeeper-persistent-storage
+          mountPath: "/bitnami"
+        readinessProbe:
+          tcpSocket:
+            port: 2181
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 2181
+          initialDelaySeconds: 15
+          periodSeconds: 20
+      volumes:
+      - name: zookeeper-persistent-storage
+        persistentVolumeClaim:
+          claimName: zookeeper-claim
