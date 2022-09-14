@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: spring-boot
-  name: inter-pod-anti-affinity-1
+  name: anti-affinity-1
 spec:
   replicas: 4
   selector:
@@ -26,4 +26,4 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
       - image: josephrodriguez/springboot-starterkit
-        name: web-application
+        name: web-app
