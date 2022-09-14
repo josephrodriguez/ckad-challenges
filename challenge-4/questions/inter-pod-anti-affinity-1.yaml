@@ -2,27 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: springboot
-  name: deployment-affinity-1
+    app: spring-boot
+  name: inter-pod-anti-affinity-1
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
-      app: springboot
+      app: web
   template:
     metadata:
       labels:
-        app: springboot
+        app: web
     spec:
       affinity:
-        nodeAffinity:
+        podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/os
+          - labelSelector:
+              matchExpressions:
+              - key: app
                 operator: In
                 values:
-                - linux
+                - web
+            topologyKey: kubernetes.io/hostname
       containers:
       - image: josephrodriguez/springboot-starterkit
-        name: springboot-starterkit
+        name: web-application
