@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-affinity-5
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/disktype
+            operator: In
+            values:
+            - ssd
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values:
+              - eu-west-1
+        - weight: 2
+          preference:
+            matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values:
+              - eu-south-1				  
+  containers:
+  - name: springboot
+    image: josephrodriguez/springboot-starterkit
