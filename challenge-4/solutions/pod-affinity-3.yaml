@@ -12,14 +12,14 @@ spec:
             operator: In
             values:
             - linux
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-            - key: kubernetes.io/disktype
-              operator: In
-              values:
-              - ssd	  
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: kubernetes.io/disktype
+            operator: In
+            values:
+            - ssd	  
   containers:
   - name: springboot
     image: josephrodriguez/springboot-starterkit
