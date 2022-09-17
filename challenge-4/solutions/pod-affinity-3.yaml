@@ -2,24 +2,36 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod-affinity-3
+  namespace: default
 spec:
   affinity:
     nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:          
-          - key: kubernetes.io/os
-            operator: In
-            values:
-            - linux
       preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 1
-        preference:
+      - preference:
           matchExpressions:
           - key: kubernetes.io/disktype
             operator: In
             values:
-            - ssd	  
+            - ssd
+        weight: 1
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
   containers:
-  - name: springboot
-    image: josephrodriguez/springboot-starterkit
+  - image: josephrodriguez/springboot-starterkit
+    imagePullPolicy: Always
+    name: springboot
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
